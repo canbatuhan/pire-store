@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package pirestore;
+
+service PireStore {
+    rpc Greet (GreetMsg) returns (GreetAck) {}
+    rpc ISet  (SetReq)   returns (SetAck)   {}
+    rpc Set   (SetReq)   returns (SetAck)   {}
+    rpc Get   (GetReq)   returns (GetAck)   {}
+    rpc Val   (ValReq)   returns (ValAck)   {}
+    rpc Rem   (RemReq)   returns (RemAck)   {}
+}
+
+/* Protocol Messages */
+
+message GreetMsg {
+    string  alias  = 1;
+    Address sender = 2;
+}
+
+message SetReq {
+    string          key     = 1;
+    string          value   = 2;
+    uint32          replica = 3;
+    bool            origin  = 4;
+    repeated string visited = 5;
+    string          sender  = 6;
+}
+
+message GetReq {
+    string          key     = 1;
+    repeated string visited = 2;
+}
+
+message ValReq {
+    string key     = 1;
+    string value   = 2;
+    uint32 version = 3;
+}
+
+message RemReq {
+    string          key     = 1;
+    uint32          replica = 2;
+    repeated string visited = 3;
+    string          sender  = 4;
+}
+
+/* Acknowledgments */
+
+message GreetAck {
+    string alias = 1;
+}
+
+message SetAck {
+    uint32          ack     = 1;
+    repeated string visited = 2;
+}
+
+message GetAck {
+    bool            success = 1;
+    string          value   = 2;
+    repeated string visited = 3;
+}
+
+message ValAck {
+    string value   = 1;
+    uint32 version = 2;
+}
+
+message RemAck {
+    uint32          ack     = 1;
+    repeated string visited = 2;
+}
+
+/* Helper Messages */
+
+message Address {
+    string host = 1;
+    uint32 port = 2;
+}

@@ -1,0 +1,31 @@
+{
+    "profile": {
+        "machine_id": "pire-node",
+        "auto_startup": false
+    },
+
+    "variables": [],
+
+    "states": [
+        {"id": "S_INIT",  "entry_action": null,  "inner_action": null,  "exit_action": null},
+        {"id": "IDLE",    "entry_action": null,  "inner_action": null,  "exit_action": null},  
+        {"id": "READING", "entry_action": null,  "inner_action": null,  "exit_action": null},  
+        {"id": "WRITING", "entry_action": null,  "inner_action": null,  "exit_action": null},
+        {"id": "S_FINAL", "entry_action": null,  "inner_action": null,  "exit_action": null}
+    ],
+
+    "transitions": [
+        {"source": {"$ref": "#/states/0"},  "destination": {"$ref": "#/states/1"},  "event": "START", "action": null},
+        {"source": {"$ref": "#/states/1"},  "destination": {"$ref": "#/states/4"},  "event": "END",   "action": null},
+
+        {"source": {"$ref": "#/states/1"},  "destination": {"$ref": "#/states/2"},  "event": "READ",  "action": null},
+        {"source": {"$ref": "#/states/2"},  "destination": {"$ref": "#/states/2"},  "event": "READ",  "action": null},
+        {"source": {"$ref": "#/states/1"},  "destination": {"$ref": "#/states/3"},  "event": "WRITE", "action": null},
+
+        {"source": {"$ref": "#/states/2"},  "destination": {"$ref": "#/states/1"},  "event": "DONE",  "action": null},
+        {"source": {"$ref": "#/states/3"},  "destination": {"$ref": "#/states/1"},  "event": "DONE",  "action": null}
+        
+    ],
+
+    "listener": null
+}

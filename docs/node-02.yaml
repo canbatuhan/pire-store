@@ -1,0 +1,27 @@
+alias: "node-00"
+
+servers:
+  http:
+    host: "127.0.0.1"
+    port: 8020
+    workers: 10
+
+  rpc:
+    host: "127.0.0.1"
+    port: 8025
+    workers: 5
+    neighbours:
+      - host: "127.0.0.1"
+        port: 8005
+      - host: "127.0.0.1"
+        port: 8015
+
+protocol:
+  replicas: 2
+
+  statemachine: 
+    min_poll_time: 0.000052
+    max_poll_time: 0.010000
+
+  database:
+    path: "./node02_local.db"
