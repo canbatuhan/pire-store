@@ -24,4 +24,4 @@ protocol:
     max_poll_time: 0.010000
 
   database:
-    path: "./node00_local.db"
+    path: "./local.db"

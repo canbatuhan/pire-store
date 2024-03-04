@@ -1,4 +1,4 @@
-alias: "node-00"
+alias: "node-02"
 
 servers:
   http:
@@ -24,4 +24,4 @@ protocol:
     max_poll_time: 0.010000
 
   database:
-    path: "./node02_local.db"
+    path: "./local.db"

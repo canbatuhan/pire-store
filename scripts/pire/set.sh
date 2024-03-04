@@ -9,7 +9,7 @@ LOG_FILENAME="log.txt"
 DB_FILENAME="local.db"
 
 # Commands
-CD="cd /home/batuhan/pire-store/pire/docs"
+CD="cd /home/batuhan/pire-store/pire"
 CREATE="sudo touch $DB_FILENAME"
 PERMISSION="sudo chmod 777 *.*"
 CLEAR="echo {} > $DB_FILENAME"
