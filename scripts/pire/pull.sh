@@ -7,12 +7,12 @@ TEMPLATE="192.168.1.12"
 PASSWORD="tolga.halit.batu"
 
 # Commands
-CD="cd /home/batuhan"
-CLONE="sudo git clone https://github.com/canbatuhan/pire-store.git"
+CD="cd /home/batuhan/pire-store"
+PULL="sudo git pull origin"
 EXIT="exit"
 
 # Script to execute
-SCRIPT="$CD;$CLONE;$EXIT"
+SCRIPT="$CD;$PULL;$EXIT"
 
 # Parse arguments
 while getopts :as:f: flag ; do
@@ -34,6 +34,6 @@ while [ $START -le $FINISH ] ; do
 	echo "---------------------------------"
 
 	sshpass -p $PASSWORD ssh $USERNAME@$HOSTNAME $SCRIPT
-    echo "[Seagull Server Machine] > 'pire-store' codes are downloaded."
+    echo "[Seagull Server Machine] > 'pire-store' codes are updated."
     START=$(($START+1))
 done

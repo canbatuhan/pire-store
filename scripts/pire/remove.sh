@@ -8,11 +8,11 @@ PASSWORD="tolga.halit.batu"
 
 # Commands
 CD="cd /home/batuhan"
-CLONE="sudo git clone https://github.com/canbatuhan/pire-store.git"
+REMOVE="sudo rm -rf pire-store"
 EXIT="exit"
 
 # Script to execute
-SCRIPT="$CD;$CLONE;$EXIT"
+SCRIPT="$CD;$REMOVE;$EXIT"
 
 # Parse arguments
 while getopts :as:f: flag ; do
@@ -34,6 +34,6 @@ while [ $START -le $FINISH ] ; do
 	echo "---------------------------------"
 
 	sshpass -p $PASSWORD ssh $USERNAME@$HOSTNAME $SCRIPT
-    echo "[Seagull Server Machine] > 'pire-store' codes are downloaded."
+    echo "[Seagull Server Machine] > 'pire-store' codes are removed."
     START=$(($START+1))
 done
