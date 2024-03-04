@@ -13,7 +13,7 @@ PULL="sudo git pull origin"
 EXIT="exit"
 
 # Script to execute
-SCRIPT="$CD;$CLONE;$SWITCH;$PULL;$EXIT"
+SCRIPT="$CD;$CLONE;$PULL;$EXIT"
 
 # Parse arguments
 while getopts :as:f: flag ; do
