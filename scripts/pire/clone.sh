@@ -9,7 +9,6 @@ PASSWORD="tolga.halit.batu"
 # Commands
 CD="cd /home/batuhan"
 CLONE="sudo git clone https://github.com/canbatuhan/pire-store.git"
-SWITCH="sudo git switch cluster"
 PULL="sudo git pull origin"
 EXIT="exit"
 
