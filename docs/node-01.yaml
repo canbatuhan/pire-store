@@ -2,19 +2,23 @@ alias: "node-01"
 
 servers:
   http:
-    host: "127.0.0.1"
-    port: 8010
-    workers: 10
+    host: "192.168.1.121"
+    port: 8000
+    workers: 5
 
   rpc:
-    host: "127.0.0.1"
-    port: 8015
+    host: "192.168.1.121"
+    port: 8010
     workers: 5
     neighbours:
-      - host: "127.0.0.1"
-        port: 8005
-      - host: "127.0.0.1"
-        port: 8025
+      - host: "192.168.1.120"
+        port: 8010
+      - host: "192.168.1.122"
+        port: 8010
+      - host: "192.168.1.123"
+        port: 8010
+      - host: "192.168.1.124"
+        port: 8010
 
 protocol:
   replicas: 2

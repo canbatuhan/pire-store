@@ -1,0 +1,31 @@
+alias: "node-03"
+
+servers:
+  http:
+    host: "192.168.1.123"
+    port: 8000
+    workers: 5
+
+  rpc:
+    host: "192.168.1.123"
+    port: 8010
+    workers: 5
+    neighbours:
+      - host: "192.168.1.120"
+        port: 8010
+      - host: "192.168.1.121"
+        port: 8010
+      - host: "192.168.1.122"
+        port: 8010
+      - host: "192.168.1.124"
+        port: 8010
+
+protocol:
+  replicas: 2
+
+  statemachine: 
+    min_poll_time: 0.000052
+    max_poll_time: 0.010000
+
+  database:
+    path: "./local.db"
