@@ -5,6 +5,7 @@ NEWLINE="echo """
 PASSWORD="tolga.halit.batu"
 USERNAME="pi_user"
 TEMPLATE="192.168.1.12"
+PORT=9000
 
 # Parse arguments
 while getopts :as:f: flag ; do
@@ -16,8 +17,10 @@ while getopts :as:f: flag ; do
 done
 
 ZK_STOP="sudo service zookeeper stop"
+KILL="pkill -9 python"
+CLOSE="fuser -k -n tcp $PORT"
 EXIT="exit"
-SCRIPT="$ZK_STOP;$EXIT"
+SCRIPT="$ZK_STOP;$KILL;$CLOSE;$EXIT"
 
 # Start ZooKeeper Servers
 while [ $START -le $FINISH ] ; do
