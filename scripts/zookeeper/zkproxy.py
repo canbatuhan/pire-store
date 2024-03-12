@@ -11,33 +11,23 @@ proxy = Flask(__name__)
 class ZooKeeperProxy:
     def __init__(self) -> None:
         self.__zk = KazooClient("127.0.0.1:2181", read_only=False)
-        self.__retry = KazooRetry(max_tries=5, ignore_expire=False)
 
     def start(self):
         self.__zk.start()
-        self.__zk.ensure_path("/kv/store")
+        self.__zk.ensure_path("/store")
 
     def set(self, key, value):
         try:
-            self.__retry(self.__zk.create, "/kv/store/{}".format(key), value.encode())
+            self.__zk.create("/store/{}".format(key), value.encode())
         except NodeExistsError:
-            self.__retry(self.__zk.set, "/kv/store/{}".format(key), value.encode())
-        except Exception:
-            pass
+            self.__zk.set("/store/{}".format(key), value.encode())
 
     def get(self, key):
-        try:
-            value, stat = self.__retry(self.__zk.get, "/kv/store/{}".format(key))
-            return value.decode(), stat.version
-        except Exception:
-            return None, None
+        value, stat = self.__zk.get("/store/{}".format(key))
+        return value.decode(), stat.version
         
     def rem(self, key):
-        try:
-            self.__retry(self.__zk.delete, "/kv/store/{}".format(key))
-            return True
-        except Exception:
-            return False
+        self.__zk.delete("/store/{}".format(key))
 
 ZK_PROXY = ZooKeeperProxy()
 
