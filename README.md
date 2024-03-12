@@ -1,1 +1,3 @@
-# pire-store-private
+# pire-store
+
+`pire-store` is a distributed key-value store designed for edge computing applications. More details to come... 
