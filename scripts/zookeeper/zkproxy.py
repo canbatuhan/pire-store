@@ -91,6 +91,7 @@ def rem():
         status=200)
 
 if __name__ == "__main__":
+    ZK_PROXY.start()
     proxy.run(
         threaded = True,
         host = "0.0.0.0",
