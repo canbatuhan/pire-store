@@ -16,10 +16,11 @@ while getopts :as:f: flag ; do
 done
 
 ZK_START="sudo service zookeeper start"
+SLEEP="sleep 5"
 CD="cd /home/batuhan/pire-store"
 PROXY_START="python ./scripts/zookeeper/zkproxy.py"
 EXIT="exit"
-SCRIPT="$ZK_START;$CD;$PROXY_START;$EXIT"
+SCRIPT="$ZK_START;$SLEEP;$CD;$PROXY_START;$EXIT"
 
 # Start ZooKeeper Servers
 while [ $START -le $FINISH ] ; do
