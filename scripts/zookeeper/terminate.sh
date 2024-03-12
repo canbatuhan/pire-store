@@ -5,7 +5,7 @@ NEWLINE="echo """
 PASSWORD="tolga.halit.batu"
 USERNAME="pi_user"
 TEMPLATE="192.168.1.12"
-PORT=9000
+PORT=2181
 
 # Parse arguments
 while getopts :as:f: flag ; do

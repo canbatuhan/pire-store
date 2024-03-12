@@ -3,7 +3,6 @@ import json
 from flask import Flask, request, Response
 
 from kazoo.client import KazooClient
-from kazoo.retry import KazooRetry
 from kazoo.exceptions import NodeExistsError
 
 proxy = Flask(__name__)
