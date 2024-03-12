@@ -1,19 +1,10 @@
 import json
-import argparse
 
 from flask import Flask, request, Response
 
 from kazoo.client import KazooClient
 from kazoo.retry import KazooRetry
 from kazoo.exceptions import NodeExistsError
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-host", required=True, type=str)
-parser.add_argument("-port", required=True, type=int)
-args = vars(parser.parse_args())
-
-HOST = args["host"]
-PORT = args["port"]
 
 proxy = Flask(__name__)
 
@@ -112,5 +103,5 @@ def rem():
 if __name__ == "__main__":
     proxy.run(
         threaded = True,
-        host = HOST,
-        port = PORT)
+        host = "0.0.0.0",
+        port = 9000)
