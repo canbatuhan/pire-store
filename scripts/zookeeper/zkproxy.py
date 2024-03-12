@@ -30,6 +30,10 @@ class ZooKeeperProxy:
         self.__zk.delete("/store/{}".format(key))
 
 ZK_PROXY = ZooKeeperProxy()
+try:
+    ZK_PROXY.start()
+except Exception as e:
+    print(e.with_traceback(None))
 
 @proxy.route("/zookeeper/store/set", methods=["POST"])
 def set():
@@ -91,7 +95,6 @@ def rem():
         status=200)
 
 if __name__ == "__main__":
-    ZK_PROXY.start()
     proxy.run(
         threaded = True,
         host = "0.0.0.0",
