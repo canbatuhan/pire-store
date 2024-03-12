@@ -7,30 +7,25 @@ USERNAME="pi_user"
 TEMPLATE="192.168.1.12"
 
 # Parse arguments
-while getopts :as:f: flag ; do
+while getopts :n: flag ; do
     case "${flag}" in
-        a) START=0; FINISH=9;;
-        s) START=${OPTARG};;
-        f) FINISH=${OPTARG};;
+        n) NODE=${OPTARG};;
     esac
 done
 
 SLEEP="sleep 3"
 CD="cd /home/batuhan/pire-store"
-START="python ./scripts/zookeeper/zkproxy.py"
+PROXY_START="python ./scripts/zookeeper/zkproxy.py"
 EXIT="exit"
-SCRIPT="$SLEEP;$CD;$START;$EXIT"
+SCRIPT="$SLEEP;$CD;$PROXY_START;$EXIT"
 
 # Start ZooKeeper Servers
-while [ $START -le $FINISH ] ; do
-    NODE_NAME="node-0$START"
-    HOSTNAME=$TEMPLATE$START
+NODE_NAME="node-0$NODE"
+HOSTNAME=$TEMPLATE$NODE
 
-	$NEWLINE
-	echo "---------------------------------"
-	echo "SSH Connection with $NODE_NAME"
-	echo "---------------------------------"
+$NEWLINE
+echo "---------------------------------"
+echo "SSH Connection with $NODE_NAME"
+echo "---------------------------------"
 
-	sshpass -p $PASSWORD ssh $USERNAME@$HOSTNAME $SCRIPT
-    START=$(($START+1))
-done
+sshpass -p $PASSWORD ssh $USERNAME@$HOSTNAME $SCRIPT

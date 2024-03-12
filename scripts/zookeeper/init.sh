@@ -15,9 +15,9 @@ while getopts :as:f: flag ; do
     esac
 done
 
-START="sudo service zookeeper start"
+ZK_START="sudo service zookeeper start"
 EXIT="exit"
-SCRIPT="$START;$EXIT"
+SCRIPT="$ZK_START;$EXIT"
 
 # Start ZooKeeper Servers
 while [ $START -le $FINISH ] ; do
