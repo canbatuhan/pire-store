@@ -10,8 +10,6 @@ proxy = Flask(__name__)
 class ZooKeeperProxy:
     def __init__(self) -> None:
         self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
-
-    def start(self):
         self.__zk.start()
         self.__zk.ensure_path("/store")
         self.__zk.stop()
@@ -36,10 +34,6 @@ class ZooKeeperProxy:
         self.__zk.stop()
 
 ZK_PROXY = ZooKeeperProxy()
-try:
-    ZK_PROXY.start()
-except Exception as e:
-    print(e.with_traceback(None))
 
 @proxy.route("/zookeeper/store/set", methods=["POST"])
 def set():

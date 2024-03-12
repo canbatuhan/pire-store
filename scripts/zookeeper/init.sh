@@ -15,11 +15,9 @@ while getopts :as:f: flag ; do
     esac
 done
 
-SLEEP="sleep 3"
-CD="cd /home/batuhan/pire-store"
-START="python ./scripts/zookeeper/zkproxy.py"
+START="sudo service zookeeper start"
 EXIT="exit"
-SCRIPT="$SLEEP;$CD;$START;$EXIT"
+SCRIPT="$START;$EXIT"
 
 # Start ZooKeeper Servers
 while [ $START -le $FINISH ] ; do
