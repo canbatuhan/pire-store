@@ -17,10 +17,7 @@ class ZooKeeperProxy:
         try:
             self.__zk.set("/store/{}".format(key), value.encode())
         except NoNodeError:
-            try:
-                self.__zk.create("/store/{}".format(key), value.encode())    
-            except NodeExistsError:
-                pass
+            self.__zk.create("/store/{}".format(key), value.encode())    
 
     def get(self, key):
         value, stat = self.__zk.get("/store/{}".format(key))
