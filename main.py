@@ -1,6 +1,9 @@
 import argparse
 import yaml
 
+import sys
+import os
+
 from pire.http.server import PireStoreHttpServer
 from pire.rpc.server  import PireStoreRpcServer
 
@@ -17,6 +20,8 @@ class Runner:
     def run(self) -> None:
         PireStoreRpcServer(self.__config).start()
         PireStoreHttpServer(self.__config).start()
-        
+
+sys.stdout = open(os.devnull, "w")
+
 if __name__ == "__main__":
     Runner(CONFIG_FILE).run()

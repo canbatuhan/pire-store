@@ -31,7 +31,7 @@ class PireStoreHttpServer(multiprocessing.Process):
         try:
             data:Dict    = request.get_json()
             key          = str(data.get("key"))
-            value        = str(data.get("value")) 
+            value        = str(data.get("val")) 
             rpc_request  = pirestore_pb2.SetReq(key=key, value=value, replica=0, origin=True, visited=[], sender=None)
             rpc_response = PireStoreHttpServer.RPC_STUB.Set(rpc_request)
 
@@ -43,8 +43,6 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
-            "value": value,
-            "replica": rpc_response.ack, 
             "msg": "OK."})
         return Response(response, status=200)
 
@@ -64,8 +62,7 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
-            "value": rpc_response.value, 
-            "success": rpc_response.success})
+            "val": rpc_response.value})
         return Response(response, status=200, mimetype="application/json")
 
     @SERVER.route("/store/rem", methods=["POST"])
@@ -84,7 +81,6 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
-            "replica": rpc_response.ack, 
             "msg": "OK."})
         return Response(response, status=200)
 

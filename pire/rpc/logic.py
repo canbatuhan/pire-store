@@ -1,4 +1,5 @@
 import copy
+import random
 from typing import Dict, List, Tuple
 
 import grpc
@@ -60,6 +61,7 @@ class PireStoreServiceLogics:
         return statemachine
 
     def __get_random_stub(self, neighbours:List[str], visited:List[str]) -> Tuple[str, int]:
+        random.shuffle(list(neighbours))
         for alias in neighbours:
             if alias not in visited:
                 return alias, self.__stub_map.get(alias)
