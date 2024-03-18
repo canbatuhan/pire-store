@@ -24,7 +24,7 @@ done
 while [ $START -le $FINISH ] ; do
     NODE_NAME="node-0$START"
     HOSTNAME=$TEMPLATE$START
-    START_CLUSTER="python main.py -config=$NODE_NAME.yaml"
+    START_CLUSTER="python main.py -config=./docs/$NODE_NAME.yaml"
     SCRIPT="$CD;$START_CLUSTER"
 
 	$NEWLINE
