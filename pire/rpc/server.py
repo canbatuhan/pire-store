@@ -55,7 +55,7 @@ class PireStoreRpcServer(multiprocessing.Process, pirestore_pb2_grpc.PireStoreSe
         # RPC Server Declarations
         self.__rpc_server = grpc.server(thread_pool=futures.ThreadPoolExecutor(max_workers=self.__MAX_WORKERS))
         pirestore_pb2_grpc.add_PireStoreServicer_to_server(self, self.__rpc_server)
-        self.__rpc_server.add_insecure_port("127.0.0.1:{}".format(self.__RPC_SERVER_PORT))
+        self.__rpc_server.add_insecure_port("0.0.0.0:{}".format(self.__RPC_SERVER_PORT))
         
         # Running the server
         self.__rpc_server.start()
