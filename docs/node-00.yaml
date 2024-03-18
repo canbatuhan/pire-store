@@ -9,7 +9,7 @@ servers:
   rpc:
     host: "192.168.1.120"
     port: 8010
-    workers: 3
+    workers: 5
     neighbours:
       - host: "192.168.1.121"
         port: 8010
