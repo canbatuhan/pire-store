@@ -99,6 +99,6 @@ class PireStoreHttpServer(multiprocessing.Process):
                 self.__RPC_SERVER_HOST, self.__RPC_SERVER_PORT)))
         
         self.SERVER.run(
-            threaded = False,
+            threaded = True,
             host = "0.0.0.0",
             port = self.__HTTP_SERVER_PORT)
