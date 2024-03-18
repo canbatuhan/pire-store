@@ -3,7 +3,7 @@ import json
 from flask import Flask, request, Response
 
 from kazoo.client import KazooClient
-from kazoo.exceptions import NodeExistsError
+from kazoo.exceptions import NoNodeError, NodeExistsError
 
 proxy = Flask(__name__)
 
@@ -12,26 +12,22 @@ class ZooKeeperProxy:
         self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
         self.__zk.start()
         self.__zk.ensure_path("/store")
-        self.__zk.stop()
 
     def set(self, key, value):
         try:
-            self.__zk.start()
-            self.__zk.create("/store/{}".format(key), value.encode())
-        except NodeExistsError:
             self.__zk.set("/store/{}".format(key), value.encode())
-        self.__zk.stop()
+        except NoNodeError:
+            self.__zk.create("/store/{}".format(key), value.encode())    
 
     def get(self, key):
-        self.__zk.start()
         value, stat = self.__zk.get("/store/{}".format(key))
-        self.__zk.stop()
         return value.decode(), stat.version
         
     def rem(self, key):
-        self.__zk.start()
-        self.__zk.delete("/store/{}".format(key))
-        self.__zk.stop()
+        try:
+            self.__zk.delete("/store/{}".format(key))
+        except NoNodeError:
+            pass
 
 ZK_PROXY = ZooKeeperProxy()
 
