@@ -6,7 +6,7 @@ MODE = "<8sH" # Little endian (8-byte string | 2-byte uint)
 
 class LocalDatabase:
     def __init__(self, path:str) -> None:
-        self.__db   = pickledb.load(path, False)
+        self.__db   = pickledb.load(path, True)
         self.__size = len(self.__db.getall())
 
     def start(self) -> None:

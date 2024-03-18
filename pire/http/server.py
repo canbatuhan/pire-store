@@ -8,6 +8,10 @@ from flask import Flask, request, Response
 from pire.rpc.service import pirestore_pb2, pirestore_pb2_grpc
 from pire.util.logger import PireStoreLogger
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 class PireStoreHttpServer(multiprocessing.Process):
     SERVER:Flask = Flask(__name__)
     RPC_STUB:pirestore_pb2_grpc.PireStoreStub = None

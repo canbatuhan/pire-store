@@ -1,13 +1,8 @@
 import argparse
 import yaml
 
-import sys
-import os
-
 from pire.http.server import PireStoreHttpServer
 from pire.rpc.server  import PireStoreRpcServer
-
-sys.stdout = open(os.devnull, "w")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-config", default="./docs/node-00.yaml", type=str)
