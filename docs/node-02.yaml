@@ -24,8 +24,8 @@ protocol:
   replicas: 2
 
   statemachine: 
-    min_poll_time: 0.000052
-    max_poll_time: 0.050000
+    min_poll_time: 0.000000052
+    max_poll_time: 0.025000
 
   database:
     path: "./local.db"

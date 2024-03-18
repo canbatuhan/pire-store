@@ -47,6 +47,8 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
+            "val": value,
+            "rep": rpc_response.ack,
             "msg": "OK."})
         return Response(response, status=200)
 
@@ -66,7 +68,8 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
-            "val": rpc_response.value})
+            "val": rpc_response.value,
+            "suc": rpc_response.success})
         return Response(response, status=200, mimetype="application/json")
 
     @SERVER.route("/store/rem", methods=["POST"])
@@ -85,6 +88,7 @@ class PireStoreHttpServer(multiprocessing.Process):
         
         response = json.dumps({
             "key": key,
+            "rep": rpc_response.ack,
             "msg": "OK."})
         return Response(response, status=200)
 
@@ -95,6 +99,6 @@ class PireStoreHttpServer(multiprocessing.Process):
                 self.__RPC_SERVER_HOST, self.__RPC_SERVER_PORT)))
         
         self.SERVER.run(
-            threaded = True,
+            threaded = False,
             host = "0.0.0.0",
             port = self.__HTTP_SERVER_PORT)
