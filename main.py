@@ -7,6 +7,8 @@ import os
 from pire.http.server import PireStoreHttpServer
 from pire.rpc.server  import PireStoreRpcServer
 
+sys.stdout = open(os.devnull, "w")
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-config", default="./docs/node-00.yaml", type=str)
 args = vars(parser.parse_args())
@@ -20,8 +22,6 @@ class Runner:
     def run(self) -> None:
         PireStoreRpcServer(self.__config).start()
         PireStoreHttpServer(self.__config).start()
-
-sys.stdout = open(os.devnull, "w")
 
 if __name__ == "__main__":
     Runner(CONFIG_FILE).run()
