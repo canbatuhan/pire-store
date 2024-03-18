@@ -141,14 +141,16 @@ class PireStoreServiceLogics:
                 elif alias != None: # No local work to do, but neighbours to visit
                     if response.replica > replica: # Remember the owner (receiving neighbour)
                         self.__set_owner(request.key, alias)
-
-                local_work = False # No need to do local work after the first iteration
+                
+                if local_work == True: # For the first iteration
+                    machine.trigger(Event.DONE) # After local work, turn back to 'IDLE'
+                    local_work = False # No need to do local work after the first iteration
                 request    = response # Re-arrange the request
 
         except Exception as e:
             self.LOGGER.log(e.with_traceback(None))
 
-        # Set the state as 'IDLE'
+        # Set the state as 'IDLE', just in case
         machine.trigger(Event.DONE)
         return pirestore_pb2.SetAck(
             ack     = request.replica,
@@ -175,8 +177,10 @@ class PireStoreServiceLogics:
                         break # No neighbours to visit nor a local work to do
 
                     # Initiate protocol
-                    request    = self.__PROTOCOLS.set_protocol(local_work, request, stub)
-                    local_work = False # No need to do local work after the first iteration
+                    request = self.__PROTOCOLS.set_protocol(local_work, request, stub)
+                    if local_work == True: # For the first iteration
+                        machine.trigger(Event.DONE) # After local work, turn back to 'IDLE'
+                        local_work = False # No need to do local work after the first iteration
                 return request
             
             # Check owners
@@ -215,7 +219,9 @@ class PireStoreServiceLogics:
 
                      # Initiate protocol
                     request, response = self.__PROTOCOLS.get_protocol(local_work, request, stub)
-                    local_work = False # No need to do local work after the first iteration
+                    if local_work == True: # For the first iteration
+                        machine.trigger(Event.DONE) # After local work, turn back to 'IDLE'
+                        local_work = False # No need to do local work after the first iteration
                 return request, response
 
             # Check owners
@@ -225,7 +231,7 @@ class PireStoreServiceLogics:
             else: # No owners exist, no need for any local work
                 _, response = get_service_loop(False, request, self.__stub_map.keys())
 
-            # Set the state as 'IDLE'
+            # Set the state as 'IDLE', just in case
             machine.trigger(Event.DONE)
             return pirestore_pb2.GetAck(
                 success = response.success,
@@ -294,7 +300,9 @@ class PireStoreServiceLogics:
                         if response.replica > replica: # Remember the owner (receiving neighbour)
                             self.__remove_owner(request.key, alias)    
 
-                    local_work = False # No need to do local work after the first iteration
+                    if local_work == True: # For the first iteration
+                        machine.trigger(Event.DONE) # After local work, turn back to 'IDLE'
+                        local_work = False # No need to do local work after the first iteration
                     request    = response # Re-arrange the message
 
                 return request
@@ -309,7 +317,7 @@ class PireStoreServiceLogics:
         except Exception as e:
             self.LOGGER.log(e.with_traceback(None))
 
-        # Set the state as 'IDLE'
+        # Set the state as 'IDLE', just in case
         machine.trigger(Event.DONE)
         return pirestore_pb2.RemAck(
             ack     = request.replica,
