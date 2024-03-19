@@ -11,7 +11,7 @@ TIMEOUT = 0.05 # seconds
 
 class ZooKeeperProxy:
     def __init__(self) -> None:
-        self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
+        self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False, timeout=TIMEOUT)
         self.__zk.start()
         self.__zk.ensure_path("/store")
         self.__zk.stop()
