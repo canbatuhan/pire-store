@@ -7,6 +7,8 @@ from kazoo.exceptions import NoNodeError, NodeExistsError
 
 proxy = Flask(__name__)
 
+TIMEOUT = 0.05 # seconds
+
 class ZooKeeperProxy:
     def __init__(self) -> None:
         self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
@@ -16,21 +18,21 @@ class ZooKeeperProxy:
 
     def set(self, key, value):
         try:
-            self.__zk.start()
+            self.__zk.start(TIMEOUT)
             self.__zk.set("/store/{}".format(key), value.encode())
         except NoNodeError:
             self.__zk.create("/store/{}".format(key), value.encode())
         self.__zk.stop()
 
     def get(self, key):
-        self.__zk.start()
+        self.__zk.start(TIMEOUT)
         value, stat = self.__zk.get("/store/{}".format(key))
         self.__zk.stop()
         return value.decode(), stat.version
         
     def rem(self, key):
         try:
-            self.__zk.start()
+            self.__zk.start(TIMEOUT)
             self.__zk.delete("/store/{}".format(key))
             self.__zk.stop()
         except NoNodeError:
