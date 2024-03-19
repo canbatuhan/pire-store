@@ -3,4 +3,5 @@ class PireStoreLogger:
         self.__name = name
 
     def log(self, msg:str):
-        print(f"[{self.__name}] - {msg}")
+        #print(f"[{self.__name}] - {msg}")
+        pass

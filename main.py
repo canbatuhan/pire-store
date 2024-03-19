@@ -17,6 +17,6 @@ class Runner:
     def run(self) -> None:
         PireStoreRpcServer(self.__config).start()
         PireStoreHttpServer(self.__config).start()
-        
+
 if __name__ == "__main__":
     Runner(CONFIG_FILE).run()

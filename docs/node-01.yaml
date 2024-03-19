@@ -21,11 +21,11 @@ servers:
         port: 8010
 
 protocol:
-  replicas: 2
+  replicas: 3
 
   statemachine: 
-    min_poll_time: 0.000052
-    max_poll_time: 0.010000
+    min_poll_time: 0.000000052
+    max_poll_time: 0.025000
 
   database:
     path: "./local.db"
