@@ -30,26 +30,19 @@ class LocalDatabase:
         value = value.decode().rstrip("\x00")
         return True, value, version
 
-    def validate(self, key:str, value:str, version:int) -> Tuple[bool]:
+    def validate(self, key:str, value:str, version:int) -> bool:
         entry = struct.pack(MODE, value.encode(), version)
         self.__db.set(key, entry.decode())
         return True
 
     def update(self, key:str, value:str) -> bool:
-        entry = self.__db.get(key)
-        if entry: # Key exists
-            entry = entry.encode()
-            _, version = struct.unpack(MODE, entry)
-            new_entry  = struct.pack(MODE, value.encode(), version+1)
-            self.__db.set(key, new_entry.decode())
-            return True
-        else: # Key does not exist
-            return False
+        entry = entry.encode()
+        _, version = struct.unpack(MODE, entry)
+        new_entry  = struct.pack(MODE, value.encode(), version+1)
+        self.__db.set(key, new_entry.decode())
+        return True
 
     def delete(self, key:str) -> bool:
-        if self.__db.exists(key):
-            self.__db.rem(key)
-            self.__size -= 1
-            return True
-        else: # Key does not exist
-            return False
+        self.__db.rem(key)
+        self.__size -= 1
+        return True
