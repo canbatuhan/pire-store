@@ -21,7 +21,7 @@ servers:
         port: 8010
 
 protocol:
-  replicas: 3
+  replicas: 2
 
   statemachine: 
     min_poll_time: 0.000000052
