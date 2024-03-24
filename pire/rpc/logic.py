@@ -61,7 +61,8 @@ class PireStoreServiceLogics:
         return statemachine
 
     def __get_random_stub(self, neighbours:List[str], visited:List[str]) -> Tuple[str, int]:
-        random.shuffle(list(neighbours))
+        neighbours = list(neighbours)
+        random.shuffle(neighbours)
         for alias in neighbours:
             if alias not in visited:
                 return alias, self.__stub_map.get(alias)
@@ -83,7 +84,8 @@ class PireStoreServiceLogics:
                     self.__owner_map.pop(key)
                     return True # is the last one
             except Exception as e:
-                pass
+                return False
+        return False
 
     def start(self):
         for host, port in self.__neighbours:
@@ -163,9 +165,6 @@ class PireStoreServiceLogics:
         try: # Set the state as `WRITING`
             machine = self.__get_statemachine(request.key)
             machine.poll_and_trigger(Event.WRITE)
-
-            if request.sender != "": # Remember the owner (sending neighbour)
-                self.__set_owner(request.key, request.sender)
             
             # Initializations before the protocol
             request.origin = False
@@ -272,6 +271,7 @@ class PireStoreServiceLogics:
             machine = self.__get_statemachine(request.key)
             machine.poll_and_trigger(Event.WRITE)
 
+            is_last_one = False
             if request.sender != "": # Forget the owner (sending neighbour)
                 is_last_one = self.__remove_owner(request.key, request.sender)
             

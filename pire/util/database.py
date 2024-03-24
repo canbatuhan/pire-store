@@ -36,11 +36,14 @@ class LocalDatabase:
         return True
 
     def update(self, key:str, value:str) -> bool:
-        entry = entry.encode()
-        _, version = struct.unpack(MODE, entry)
-        new_entry  = struct.pack(MODE, value.encode(), version+1)
-        self.__db.set(key, new_entry.decode())
-        return True
+        entry = self.__db.get(key)
+        if entry:
+            entry = entry.encode()
+            _, version = struct.unpack(MODE, entry)
+            new_entry  = struct.pack(MODE, value.encode(), version+1)
+            self.__db.set(key, new_entry.decode())
+            return True
+        return False
 
     def delete(self, key:str) -> bool:
         self.__db.rem(key)
