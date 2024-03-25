@@ -61,7 +61,8 @@ class PireStoreServiceLogics:
         return statemachine
 
     def __get_random_stub(self, neighbours:List[str], visited:List[str]) -> Tuple[str, int]:
-        random.shuffle(list(neighbours))
+        neighbours = list(neighbours)
+        random.shuffle(neighbours)
         for alias in neighbours:
             if alias not in visited:
                 return alias, self.__stub_map.get(alias)
@@ -81,8 +82,10 @@ class PireStoreServiceLogics:
                 owners.remove(owner)
                 if len(owners) == 0:
                     self.__owner_map.pop(key)
+                    return True # is the last one
             except Exception as e:
-                pass
+                return False
+        return False
 
     def start(self):
         for host, port in self.__neighbours:
@@ -162,9 +165,6 @@ class PireStoreServiceLogics:
         try: # Set the state as `WRITING`
             machine = self.__get_statemachine(request.key)
             machine.poll_and_trigger(Event.WRITE)
-
-            if request.sender != "": # Remember the owner (sending neighbour)
-                self.__set_owner(request.key, request.sender)
             
             # Initializations before the protocol
             request.origin = False
@@ -271,8 +271,9 @@ class PireStoreServiceLogics:
             machine = self.__get_statemachine(request.key)
             machine.poll_and_trigger(Event.WRITE)
 
+            is_last_one = False
             if request.sender != "": # Forget the owner (sending neighbour)
-                self.__remove_owner(request.key, request.sender)
+                is_last_one = self.__remove_owner(request.key, request.sender)
             
             # Initializations before the protocol
             request.sender = self.__ALIAS
@@ -286,9 +287,6 @@ class PireStoreServiceLogics:
                     # Initiate protocol
                     replica  = request.replica
                     response = self.__PROTOCOLS.rem_protocol(local_work, request, stub) 
-                    
-                    if response.replica > replica: # Forget the owner (receiving neighbour)
-                        self.__remove_owner(request.key, alias)
 
                     if local_work and alias != None:
                         if response.replica == replica: # Local work failed!
@@ -311,8 +309,10 @@ class PireStoreServiceLogics:
             owners = self.__owner_map.get(request.key)
             if owners != None: # Owners exist
                 request = rem_service_loop(True, request, owners)
-            else: # No owners exist (may be the last owner)
-                request = rem_service_loop(True, request, self.__stub_map.keys())
+            elif is_last_one: # No owners exist, but may be the last owner
+                request = rem_service_loop(True, request, [])
+            else: # No owners exist, nor the the last owner
+                request = rem_service_loop(False, request, self.__stub_map.keys())
 
         except Exception as e:
             self.LOGGER.log(e.with_traceback(None))

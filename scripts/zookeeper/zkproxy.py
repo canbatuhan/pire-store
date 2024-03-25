@@ -7,32 +7,35 @@ from kazoo.exceptions import NoNodeError, NodeExistsError
 
 proxy = Flask(__name__)
 
+HOSTS = ",".join(["192.168.1.120:2181",
+                  "192.168.1.121:2181",
+                  "192.168.1.122:2181",
+                  "192.168.1.123:2181",
+                  "192.168.1.124:2181"])
+
 class ZooKeeperProxy:
     def __init__(self) -> None:
-        self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
+        self.__zk = KazooClient(hosts=HOSTS, read_only=False)
         self.__zk.start()
         self.__zk.ensure_path("/store")
-        self.__zk.stop()
 
     def set(self, key, value):
         try:
-            self.__zk.start()
             self.__zk.set("/store/{}".format(key), value.encode())
+            self.__zk.sync("/store/{}".format(key))
         except NoNodeError:
             self.__zk.create("/store/{}".format(key), value.encode())
-        self.__zk.stop()
+            self.__zk.sync("/store/{}".format(key))
 
     def get(self, key):
-        self.__zk.start()
+        self.__zk.sync("/store/{}".format(key))
         value, stat = self.__zk.get("/store/{}".format(key))
-        self.__zk.stop()
         return value.decode(), stat.version
         
     def rem(self, key):
         try:
-            self.__zk.start()
             self.__zk.delete("/store/{}".format(key))
-            self.__zk.stop()
+            self.__zk.sync("/store/{}".format(key))
         except NoNodeError:
             pass
 
@@ -99,6 +102,5 @@ def rem():
 
 if __name__ == "__main__":
     proxy.run(
-        threaded = True,
         host = "0.0.0.0",
         port = 9000)
