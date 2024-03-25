@@ -7,11 +7,15 @@ from kazoo.exceptions import NoNodeError, NodeExistsError
 
 proxy = Flask(__name__)
 
-TIMEOUT = 0.05 # seconds
+HOSTS = ",".join(["192.168.1.120:2181",
+                  "192.168.1.121:2181",
+                  "192.168.1.122:2181",
+                  "192.168.1.123:2181",
+                  "192.168.1.124:2181"])
 
 class ZooKeeperProxy:
     def __init__(self) -> None:
-        self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False, timeout=TIMEOUT)
+        self.__zk = KazooClient(hosts=HOSTS, read_only=False)
         self.__zk.start()
         self.__zk.ensure_path("/store")
 
