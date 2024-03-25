@@ -14,33 +14,26 @@ class ZooKeeperProxy:
         self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False, timeout=TIMEOUT)
         self.__zk.start()
         self.__zk.ensure_path("/store")
-        self.__zk.stop()
 
     def set(self, key, value):
-        self.__zk.start()
         try:
             self.__zk.set("/store/{}".format(key), value.encode())
             self.__zk.sync("/store/{}".format(key))
         except NoNodeError:
             self.__zk.create("/store/{}".format(key), value.encode())
             self.__zk.sync("/store/{}".format(key))
-        self.__zk.stop()
 
     def get(self, key):
-        self.__zk.start()
         value, stat = self.__zk.get("/store/{}".format(key))
         self.__zk.sync("/store/{}".format(key))
-        self.__zk.stop()
         return value.decode(), stat.version
         
     def rem(self, key):
-        self.__zk.start()
         try:
             self.__zk.delete("/store/{}".format(key))
             self.__zk.sync("/store/{}".format(key))
         except NoNodeError:
-            self.__zk.stop()
-        self.__zk.stop()
+            pass
 
 ZK_PROXY = ZooKeeperProxy()
 
