@@ -7,9 +7,10 @@ from kazoo.exceptions import NoNodeError, NodeExistsError
 
 proxy = Flask(__name__)
 
+
 class ZooKeeperProxy:
     def __init__(self) -> None:
-        self.__zk = KazooClient(hosts="127.0.0.1", read_only=False)
+        self.__zk = KazooClient(hosts="127.0.0.1:2181", read_only=False)
         self.__zk.start()
         self.__zk.ensure_path("/store")
 
