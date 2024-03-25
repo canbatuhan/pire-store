@@ -24,8 +24,8 @@ class ZooKeeperProxy:
             self.__zk.sync("/store/{}".format(key))
 
     def get(self, key):
-        value, stat = self.__zk.get("/store/{}".format(key))
         self.__zk.sync("/store/{}".format(key))
+        value, stat = self.__zk.get("/store/{}".format(key))
         return value.decode(), stat.version
         
     def rem(self, key):
