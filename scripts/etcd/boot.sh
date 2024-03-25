@@ -49,7 +49,7 @@ ETCD_NODE_NAME="etcd-node-0${NODE_ID}"
 CLUSTER_LISTENER="http://${HOSTNAME}:${CLUSTER_PORT}"
 CLIENT_LISTENER="http://${HOSTNAME}:${CLIENT_PORT}"
 
-START="etcd --name ${ETCD_NODE_NAME} --initial-advertise-peer-urls ${CLUSTER_LISTENER} --listen-peer-urls ${CLUSTER_LISTENER} --advertise-client-urls ${CLIENT_LISTENER} --listen-client-urls ${CLIENT_LISTENER} --initial-cluster ${CLUSTER} --initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN} --backend-batch-limit=1"
+START="etcd --name ${ETCD_NODE_NAME} --initial-advertise-peer-urls ${CLUSTER_LISTENER} --listen-peer-urls ${CLUSTER_LISTENER} --advertise-client-urls ${CLIENT_LISTENER} --listen-client-urls ${CLIENT_LISTENER} --initial-cluster ${CLUSTER} --initial-cluster-state ${CLUSTER_STATE} --initial-cluster-token ${TOKEN} --backend-batch-limit=1 --max-snapshots=1 --max-txn-ops=1"
 
 # Script to execute
 SCRIPT="$START"
