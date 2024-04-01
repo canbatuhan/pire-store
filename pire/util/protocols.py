@@ -1,3 +1,4 @@
+import threading
 from typing import Tuple
 
 from pire.rpc.service   import pirestore_pb2
@@ -11,6 +12,21 @@ class PireStoreProtocols:
     def __init__(self, database:LocalDatabase, replicas:int) -> None:
         self.__database = database
         self.__replicas = replicas
+    
+    def __validate_thread(database:LocalDatabase, stub:pirestore_pb2_grpc.PireStoreStub, key, value, version):
+        try: # Call 'Validate'
+            validate_request = pirestore_pb2.ValReq(
+                key=key, value=value, version=version)
+            validate_response = stub.Val(validate_request)
+            
+            # Eventual consistency!
+            if validate_response.version > version:
+                database.validate(validate_request.key,
+                                  validate_response.value,
+                                  validate_response.version)
+                
+        except Exception:
+            pass
 
     def iset_protocol(
             self,
@@ -80,28 +96,16 @@ class PireStoreProtocols:
         if local_work: # Do local work
             success, value, version = self.__database.read(request.key)
             
-            if success: # Validate the pair
-                try: # Call 'Validate'
-                    validate_request = pirestore_pb2.ValReq(
-                        key=request.key, value=value, version=version)
-                    validate_response = stub.Val(validate_request)
-                    
-                    # Eventual consistency!
-                    if validate_response.version > version:
-                        self.__database.validate(validate_request.key,
-                                                 validate_response.value,
-                                                 validate_response.version)
-                        validate_request.value   = validate_response.value
-                        validate_request.version = validate_response.version
+            if success: # Validate the pair in a thread and return
 
-                    # Pair is found and validated, return
-                    return request, pirestore_pb2.GetAck(
-                        success = True,
-                        value   = validate_request.value,
-                        visited = request.visited)
-                
-                except Exception as e:
-                    self.LOGGER.log(e.with_traceback(None))
+                # Validate in a thread
+                threading.Thread(target=self.__validate_thread, args=(request.key, value, version)).start()
+
+                # Pair is found and sent to validation, return
+                return request, pirestore_pb2.GetAck(
+                    success = True,
+                    value   = value,
+                    visited = request.visited)
         
         # Could not find the pair locally, extend the protocol
         try: # Call 'Get'
