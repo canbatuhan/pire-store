@@ -99,7 +99,7 @@ class PireStoreProtocols:
             if success: # Validate the pair in a thread and return
 
                 # Validate in a thread
-                threading.Thread(target=self.__validate_thread, args=(request.key, value, version)).start()
+                threading.Thread(target=self.__validate_thread, args=(self.__database, stub, request.key, value, version)).start()
 
                 # Pair is found and sent to validation, return
                 return request, pirestore_pb2.GetAck(
