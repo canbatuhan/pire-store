@@ -13,7 +13,7 @@ class PireStoreProtocols:
         self.__database = database
         self.__replicas = replicas
     
-    def __validate_thread(database:LocalDatabase, stub:pirestore_pb2_grpc.PireStoreStub, key, value, version):
+    def __validate_thread(self, stub, key, value, version):
         try: # Call 'Validate'
             validate_request = pirestore_pb2.ValReq(
                 key=key, value=value, version=version)
@@ -21,9 +21,9 @@ class PireStoreProtocols:
             
             # Eventual consistency!
             if validate_response.version > version:
-                database.validate(validate_request.key,
-                                  validate_response.value,
-                                  validate_response.version)
+                self.__database.validate(validate_request.key,
+                                         validate_response.value,
+                                         validate_response.version)
                 
         except Exception:
             pass
@@ -99,7 +99,7 @@ class PireStoreProtocols:
             if success: # Validate the pair in a thread and return
 
                 # Validate in a thread
-                threading.Thread(target=self.__validate_thread, args=(self.__database, stub, request.key, value, version)).start()
+                threading.Thread(target=self.__validate_thread, args=(stub, request.key, value, version)).start()
 
                 # Pair is found and sent to validation, return
                 return request, pirestore_pb2.GetAck(
