@@ -420,10 +420,14 @@
         </HTTPSamplerProxy>
         <hashTree/>
       </hashTree>
+<<<<<<< HEAD
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="16-Thread" enabled="false">
+=======
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="16-Thread" enabled="true">
         <intProp name="ThreadGroup.num_threads">16</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+>>>>>>> 8d2aef879697f8a4a3763bc0f5c51402eacdd092
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
           <stringProp name="LoopController.loops">625</stringProp>
@@ -479,6 +483,16 @@
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+<<<<<<< HEAD
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="rem-request" enabled="false">
+=======
+>>>>>>> 8d2aef879697f8a4a3763bc0f5c51402eacdd092
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
