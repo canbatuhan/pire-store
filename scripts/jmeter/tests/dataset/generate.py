@@ -23,7 +23,7 @@ HOSTS = [
 
 URLS = {
     "etcd": {
-        "set": "/v3/kv/set",
+        "set": "/v3/kv/put",
         "get": "/v3/kv/range",
         "rem": "/v3/kv/deleterange"
     },
