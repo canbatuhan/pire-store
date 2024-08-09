@@ -23,8 +23,6 @@ class ZooKeeperProxy:
             self.__zk.sync("/store/{}".format(key))
             self.__zk.create("/store/{}".format(key), value.encode())
             self.__zk.sync("/store/{}".format(key))
-        except:
-            self.__zk.sync("/store/{}".format(key))
 
     def get(self, key):
         try:
@@ -32,8 +30,7 @@ class ZooKeeperProxy:
             value, stat = self.__zk.get("/store/{}".format(key))
             self.__zk.sync("/store/{}".format(key))
             return value.decode(), stat.version
-        except:
-            self.__zk.sync("/store/{}".format(key))
+        except NoNodeError:
             return -1, -1
         
     def rem(self, key):
@@ -42,7 +39,7 @@ class ZooKeeperProxy:
             self.__zk.delete("/store/{}".format(key))
             self.__zk.sync("/store/{}".format(key))
         except:
-            self.__zk.sync("/store/{}".format(key))
+            pass
 
 ZK_PROXY = ZooKeeperProxy()
 
